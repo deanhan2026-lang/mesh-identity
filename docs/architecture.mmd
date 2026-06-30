@@ -1,0 +1,78 @@
+graph TB
+    subgraph CLI["📟 CLI (mesh-id)"]
+        direction LR
+        C1["init"]
+        C2["sync"]
+        C3["scene"]
+        C4["status"]
+        C5["conflict"]
+    end
+
+    subgraph CORE["⚙️ 核心层"]
+        direction TB
+        DID["🔑 DID Manager
+        身份生成/验证
+        Ed25519 + soul_anchor"]
+        SYNC["🔄 Memory Sync
+        双向同步
+        向量时钟 + 冲突检测"]
+        SCENE["🎯 Scene Adapter
+        场景自适应
+        工作/个人/开发"]
+    end
+
+    subgraph STORAGE["💾 存储抽象层"]
+        NAS["📁 NAS Storage
+        SMB/NFS 抽象
+        文件锁 + 健康检查"]
+    end
+
+    subgraph SHARED["🌐 共享存储 (NAS)"]
+        D["did/
+        DID凭证 公钥"]
+        M["memory_vault/
+        结构化记忆"]
+        S["scene_config/
+        场景配置"]
+        L["lock/
+        文件锁"]
+    end
+
+    C1 --> DID
+    C2 --> SYNC
+    C3 --> SCENE
+    C4 --> SYNC
+    C5 --> SYNC
+
+    DID --> NAS
+    SYNC --> NAS
+    SCENE --> NAS
+
+    NAS --> D
+    NAS --> M
+    NAS --> S
+    NAS --> L
+
+    subgraph TERMINALS["🖥️ 多终端"]
+        T1["Windows Nyx"]
+        T2["Mac Nyx"]
+        T3["NAS Agent"]
+    end
+
+    TERMINALS --> SHARED
+
+    style CLI fill:#1a1a2e,stroke:#e94560,stroke-width:2px,color:#fff
+    style CORE fill:#16213e,stroke:#0f3460,stroke-width:2px,color:#fff
+    style STORAGE fill:#0f3460,stroke:#533483,stroke-width:2px,color:#fff
+    style SHARED fill:#2d1b69,stroke:#e94560,stroke-width:2px,color:#fff
+    style TERMINALS fill:#1a1a2e,stroke:#e94560,stroke-width:1px,color:#aaa
+
+    style DID fill:#e94560,color:#fff
+    style SYNC fill:#0f3460,color:#fff
+    style SCENE fill:#533483,color:#fff
+    style NAS fill:#16213e,color:#fff
+
+    style D fill:#2d1b69,color:#fff
+    style M fill:#2d1b69,color:#fff
+    style S fill:#2d1b69,color:#fff
+    style L fill:#2d1b69,color:#fff

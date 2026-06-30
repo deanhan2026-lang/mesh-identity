@@ -43,6 +43,7 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "pynacl>=1.5.0",
+        "cryptography>=41.0.0",  # 私钥加密存储
         "watchdog>=3.0.0",
         "pyyaml>=6.0",
         "requests>=2.28.0",
