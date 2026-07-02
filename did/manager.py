@@ -25,7 +25,6 @@ from typing import Dict, Optional, Tuple
 try:
     import nacl.signing
     import nacl.encoding
-    from nacl.public import PrivateKey, PublicKey
     _HAS_NACL = True
 except ImportError:
     _HAS_NACL = False
@@ -162,10 +161,10 @@ class DIDManager:
             )
         
         # 生成Ed25519密钥对
-        private_key = PrivateKey.generate()
-        public_key = private_key.public_key
-        public_key_bytes = bytes(public_key)
-        private_key_bytes = bytes(private_key)
+        signing_key = nacl.signing.SigningKey.generate()
+        verify_key = signing_key.verify_key
+        public_key_bytes = bytes(verify_key)
+        private_key_bytes = bytes(signing_key)
         
         # 构造DID
         did = f"did:key:z{public_key_bytes.hex()}"
